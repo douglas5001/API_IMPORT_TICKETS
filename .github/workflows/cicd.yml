@@ -78,16 +78,17 @@ jobs:
     steps:
       - name: Deploy local no servidor
         run: |
-          cd ${{ secrets.SERVER_PATH }}   # <-- deve ser a pasta REAL com .git e docker-compose
+          cd "${{ secrets.SERVER_PATH }}"
+          
           echo "Atualizando código no servidor..."
           git fetch --all
-          git reset --hard origin/main   # mais seguro que git pull
-
+          git reset --hard origin/main
+          
           echo "Subindo containers..."
-          docker-compose down
+          docker-compose down || true
           docker-compose up -d --build
-
+          
           echo "Executando migrações..."
           docker-compose exec -T api alembic upgrade head
-
+          
           echo "Deploy concluído com sucesso!"
