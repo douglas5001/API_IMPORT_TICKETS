@@ -5,7 +5,7 @@ services:
     build: .
     container_name: fastapi_tickets
     ports:
-      - "8000:8000"
+      - "8001:8001"
     environment:
       DATABASE_URL: postgresql+psycopg2://root:SenhaSuperForte1234@postgres_db:5432/postgres_db
       TZ: America/Sao_Paulo
