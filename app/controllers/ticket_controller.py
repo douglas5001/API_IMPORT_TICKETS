@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from app.config.database import get_db
 from app.schemas import ticket_schema
 from app.services.ticket_service import TicketService
+from app.utils.user.rbac import permission_required
+
 
 router = APIRouter()
 
@@ -53,6 +55,7 @@ def update_ticket(
 def delete_ticket(
     ticket_id: int,
     service: TicketService = Depends(get_ticket_service),
+    _=Depends(permission_required(["GUEST"]))
 ):
     success = service.delete_ticket(ticket_id)
     if not success:
@@ -63,7 +66,7 @@ def delete_ticket(
 @router.post("/tickets/import")
 def import_tickets(
     file: UploadFile = File(...),
-    service: TicketService = Depends(get_ticket_service),
+    service: TicketService = Depends(get_ticket_service)
 ):
     """
     Importa tickets em massa a partir de um arquivo Excel.

@@ -9,6 +9,9 @@ from alembic import context
 from app.config.database import Base, engine
 from app.models import ticket_model
 from app.models import ticket_log_model
+from app.models.user import user_model
+from app.models.user import profile_model
+from app.models.user import permission_model
 # --------------------------------------------------
 
 config = context.config

@@ -18,9 +18,17 @@ class Config(BaseSettings):
     db_host: str = "localhost"
     db_port: int = 5432
     db_name: str = "postgres"
+    
+    secret_key: str = "CHANGE_ME_32_CHARS_MINIMUM"
+    access_token_expire_minutes: int = 60
+
+    # === GOOGLE AUTH ===
+    google_client_id: str
+    google_client_secret: str
+    google_redirect_uri: str = "http://localhost:8000/api/v1/auth/google/callback"
 
     model_config = SettingsConfigDict(
-        env_file=None,
+        env_file=".env",    # <- agora pode carregar automático
         extra="ignore"
     )
 
