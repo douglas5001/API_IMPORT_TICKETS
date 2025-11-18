@@ -1,6 +1,8 @@
 from datetime import datetime
+
 from sqlalchemy import String, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
+
 from app.config.database import Base
 
 
@@ -8,6 +10,14 @@ class Ticket(Base):
     __tablename__ = "tickets"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
+
+    cod_ticket: Mapped[str] = mapped_column(
+        String,
+        unique=True,
+        index=True,
+        nullable=False,
+    )
+
     descricao: Mapped[str] = mapped_column(String, nullable=False)
     responsavel: Mapped[str] = mapped_column(String, nullable=False)
 
