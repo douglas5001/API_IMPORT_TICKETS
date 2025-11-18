@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.models.ticket_model import Ticket
 from app.schemas import ticket_schema
@@ -30,6 +31,14 @@ class TicketRepository:
             responsavel=data.responsavel,
             data_atualizacao=data.data_atualizacao,
         )
+        
+        existing = self.get_by_cod_ticket(data.cod_ticket)
+        if existing:
+            raise HTTPException(
+                status_code=400,
+                detail=f"cod_ticket '{data.cod_ticket}' já existe"
+            )   
+                 
         self._db.add(ticket)
         self._db.commit()
         self._db.refresh(ticket)
