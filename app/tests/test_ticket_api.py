@@ -1,6 +1,3 @@
-from datetime import datetime
-from zoneinfo import ZoneInfo
-
 def test_create_ticket(client):
     payload = {
         "cod_ticket": "RITM0001",

@@ -1,10 +1,9 @@
-from collections.abc import Generator
 from io import BytesIO
 from zoneinfo import ZoneInfo
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 import pandas as pd
 from sqlalchemy.orm import Session
-from app.config.database import SessionLocal, get_db
+from app.config.database import get_db
 from app.schemas import ticket_schema
 from app.services.ticket_service import TicketService
 
