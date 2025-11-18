@@ -3,7 +3,14 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.config.database import Base, engine
+import os
+from dotenv import load_dotenv
 
+# Indica ao config.py que estamos rodando pytest
+os.environ["PYTEST_RUNNING"] = "1"
+
+# Carrega o .env.test
+load_dotenv(".env.test")
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_db():

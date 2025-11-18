@@ -1,18 +1,29 @@
 from dotenv import load_dotenv
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
 
-load_dotenv()
+# Carrega .env (produção) ou .env.test (pytest)
+if os.getenv("PYTEST_RUNNING") == "1":
+    load_dotenv(".env.test")
+else:
+    load_dotenv()
 
 
 class Config(BaseSettings):
     app_name: str = "MyProjectFastApiTickts"
     debug: bool = False
 
-    db_user: str
-    db_password: str
-    db_host: str
-    db_port: int
-    db_name: str
+    # Valores default SOMENTE para testes
+    db_user: str = "postgres"
+    db_password: str = "postgres"
+    db_host: str = "localhost"
+    db_port: int = 5432
+    db_name: str = "postgres"
+
+    model_config = SettingsConfigDict(
+        env_file=None,  # já carregamos manualmente com load_dotenv()
+        extra="ignore"
+    )
 
     @property
     def db_url(self) -> str:
