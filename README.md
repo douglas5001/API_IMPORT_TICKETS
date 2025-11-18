@@ -53,5 +53,11 @@ Caso queira executar o projeto para produção basta inicializar o docker-compos
 docker compose up -d
 ```
 
+## Instruções de utilização.
+Você pode acassar atraves do Swagger `http://127.0.0.1:8000/docs` ou pelo servidor remoto onde foi feito o deploy `http://147.93.183.190:8001/docs`
 
+### OPÇÃO 2
 
+Pode importar o arquivo `API IMPORTAÇÃO.postman_collection.json` que deixei no diretorio e você terá as rotas prontas e com os dados para executar
+
+![alt text](image-1.png)

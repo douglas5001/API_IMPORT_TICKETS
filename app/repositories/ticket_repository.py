@@ -15,8 +15,6 @@ class TicketRepository:
     def __init__(self, session: Session):
         self._db = session
 
-    # ================= Helpers de serialização / log =================
-
     def _ticket_to_dict(self, ticket: Ticket | None) -> dict | None:
         """
         Converte um Ticket em dict com valores JSON-serializáveis.
@@ -61,8 +59,6 @@ class TicketRepository:
         )
         self._db.add(log)
 
-    # ================= CRUD básico =================
-
     def list_tickets(self) -> list[Ticket]:
         return self._db.query(Ticket).all()
 
@@ -94,7 +90,6 @@ class TicketRepository:
         )
 
         self._db.add(ticket)
-        # Gera o ID antes do log, mas ainda sem commit
         self._db.flush()
 
         after = self._ticket_to_dict(ticket)
@@ -139,13 +134,11 @@ class TicketRepository:
         before = self._ticket_to_dict(ticket)
 
         self._db.delete(ticket)
-        # log ainda pode usar os dados em memória
+
         self._log_action(action="DELETE", ticket=ticket, before=before, after=None)
 
         self._db.commit()
         return True
-
-    # ========= Importação Excel =========
 
     def upsert_from_import(
         self,
@@ -167,7 +160,6 @@ class TicketRepository:
         if isinstance(excel_dt, datetime) and excel_dt.tzinfo is None:
             excel_dt = excel_dt.replace(tzinfo=LOCAL_TZ)
 
-        # ---- NOVO: CREATE via import ----
         if ticket is None:
             ticket = Ticket(
                 cod_ticket=row.cod_ticket,
@@ -190,11 +182,9 @@ class TicketRepository:
             self._db.refresh(ticket)
             return ticket, "created"
 
-        # ---- Já existia: decidir se atualiza ou pula ----
         db_dt = ticket.data_atualizacao
 
         if excel_dt is None:
-            # Loga que foi ignorado
             before = self._ticket_to_dict(ticket)
             self._log_action(
                 action="IMPORT_SKIPPED",
@@ -209,7 +199,6 @@ class TicketRepository:
             db_dt = db_dt.replace(tzinfo=LOCAL_TZ)
 
         if db_dt is not None and db_dt >= excel_dt:
-            # mantemos o registro, mas podemos registrar o skip também
             before = self._ticket_to_dict(ticket)
             self._log_action(
                 action="IMPORT_SKIPPED",
@@ -220,7 +209,6 @@ class TicketRepository:
             self._db.commit()
             return ticket, "skipped"
 
-        # Atualiza com dados mais novos
         before = self._ticket_to_dict(ticket)
 
         ticket.descricao = row.descricao

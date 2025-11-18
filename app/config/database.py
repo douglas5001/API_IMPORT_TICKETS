@@ -13,10 +13,8 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if os.getenv("PYTEST_RUNNING") == "1":
     DATABASE_URL = "postgresql+psycopg2://postgres:postgres@localhost:5432/test_db"
 
-# 🔥 mypy não reclama pois agora garantimos string
 if DATABASE_URL is None:
     raise RuntimeError("DATABASE_URL não está definida!")
-
 
 engine = create_engine(
     DATABASE_URL,
