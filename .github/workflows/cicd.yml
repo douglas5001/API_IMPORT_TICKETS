@@ -71,27 +71,25 @@ jobs:
   #  Só executa se o CI PASSAR
   # --------------------------------------------------
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: tests
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            cd ${{ secrets.SERVER_PATH }}
-            echo "Atualizando código no servidor..."
-            git pull origin main
+      - name: Checkout código
+        uses: actions/checkout@v4
 
-            echo "Subindo containers..."
-            docker-compose down
-            docker-compose up -d --build
+      - name: Deploy via SSH (não precisa mais SSH, pode virar local!)
+        run: |
+          cd ${{ secrets.SERVER_PATH }}
+          echo "Atualizando código no servidor..."
+          git pull origin main
 
-            echo "Executando migrações..."
-            docker-compose exec -T api alembic upgrade head
+          echo "Subindo containers..."
+          docker-compose down
+          docker-compose up -d --build
 
-            echo "Deploy concluído com sucesso!"
+          echo "Executando migrações..."
+          docker-compose exec -T api alembic upgrade head
+
+          echo "Deploy concluído com sucesso!"
