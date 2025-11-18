@@ -6,12 +6,13 @@ from datetime import datetime, timedelta
 from typing import Optional, List
 from fastapi.security import OAuth2PasswordBearer
 from pytest import Session
+from app.config.config import config
 from app.config.database import get_db
 from app.models.user.user_model import User
 from app.utils.user.jwt_utils import decode_token
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
-SECRET_KEY = "super-secret-key"   # coloque no .env depois
+SECRET_KEY = config.secret_key   # coloque no .env depois
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 

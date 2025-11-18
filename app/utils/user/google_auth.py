@@ -8,8 +8,8 @@ from app.models.user.permission_model import Permission
 from app.utils.user.jwt_utils import create_access_token
 
 
-GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
-GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
+GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"  # nosec B105
+GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"  # nosec B105
 
 
 def get_google_auth_url() -> str:
@@ -33,7 +33,7 @@ def exchange_code_for_token(code: str) -> dict:
         "grant_type": "authorization_code",
     }
 
-    r = requests.post(GOOGLE_TOKEN_URL, data=data)
+    r = requests.post(GOOGLE_TOKEN_URL, data=data, timeout=10)
 
     if r.status_code != 200:
         raise HTTPException(status_code=400, detail="Erro ao trocar code pelo token")
@@ -43,7 +43,7 @@ def exchange_code_for_token(code: str) -> dict:
 
 def get_google_user_info(access_token: str) -> dict:
     headers = {"Authorization": f"Bearer {access_token}"}
-    r = requests.get(GOOGLE_USERINFO_URL, headers=headers)
+    r = requests.get(GOOGLE_USERINFO_URL, headers=headers, timeout=10)
 
     if r.status_code != 200:
         raise HTTPException(status_code=400, detail="Erro ao buscar informações do Google")
@@ -82,7 +82,7 @@ def login_with_google(code: str, db: Session):
         user = User(
             name=name,
             email=email,
-            password="",
+            password="",  # nosec B106
             is_admin=False,
             profile_id=profile.id
         )
