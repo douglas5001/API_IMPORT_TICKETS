@@ -7,12 +7,50 @@ on:
     branches: ["main"]
 
 jobs:
+  # ==========================================================
+  #  JOB 1 — QUALITY CHECKS (lint, type-check, security)
+  # ==========================================================
+  quality:
+    runs-on: ubuntu-latest
 
-  # --------------------------------------------------
-  #  JOB 1 — Testes (CI)
-  # --------------------------------------------------
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff mypy bandit pip-audit
+
+      # LINT - Ruff
+      - name: Lint - ruff
+        run: ruff check .
+
+      # TYPE CHECK - mypy
+      - name: Type checking - mypy
+        run: mypy app/
+
+      # SECURITY - bandit
+      - name: Segurança - bandit
+        run: bandit -r app/
+
+      # DEPENDENCY SECURITY - pip-audit
+      - name: Auditoria de dependências - pip-audit
+        run: pip-audit || true   # não interrompe pipeline se houver CVEs
+
+
+  # ==========================================================
+  #  JOB 2 — TESTES COMPLETOS (CI)
+  # ==========================================================
   tests:
     runs-on: ubuntu-latest
+    needs: quality
 
     services:
       postgres:
@@ -35,7 +73,6 @@ jobs:
       DB_HOST: localhost
       DB_PORT: 5432
       DB_NAME: test_db
-
       DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/test_db
 
     steps:
@@ -66,29 +103,59 @@ jobs:
         run: pytest -v
 
 
-  # --------------------------------------------------
-  #  JOB 2 — Deploy (CD)
-  #  Só executa se o CI PASSAR
-  # --------------------------------------------------
+  # ==========================================================
+  #  JOB 3 — DOCKER BUILD TEST (antes do deploy)
+  # ==========================================================
+  docker_build:
+    runs-on: ubuntu-latest
+    needs: tests
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Testar build Docker
+        run: docker build -t api_import_tickets:test .
+
+
+  # ==========================================================
+  #  JOB 4 — DEPLOY (SELF-HOSTED)
+  # ==========================================================
   deploy:
     runs-on: self-hosted
-    needs: tests
+    needs: docker_build
     if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Deploy local no servidor
         run: |
           cd "${{ secrets.SERVER_PATH }}"
-          
+
           echo "Atualizando código no servidor..."
           git fetch --all
           git reset --hard origin/main
-          
+
           echo "Subindo containers..."
           docker compose down || true
           docker compose up -d --build
-          
+
           echo "Executando migrações..."
           docker compose exec -T api alembic upgrade head
-          
-          echo "Deploy concluído com sucesso!"
+
+          echo "Realizando health-check..."
+          sleep 5
+          curl -f http://localhost:8001/ || (echo "❌ Health-check falhou!" && exit 1)
+
+          echo "Deploy concluído com sucesso! 🎉"
+
+
+  # ==========================================================
+  #  JOB 5 — NOTIFICAÇÃO DE FALHA
+  # ==========================================================
+  notify_failure:
+    needs: [quality, tests, docker_build, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notificar falha (log no Actions)
+        run: echo "❌ O pipeline falhou!"
