@@ -27,6 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install ruff mypy bandit pip-audit
+          pip install types-requests
 
       # LINT - Ruff
       - name: Lint - ruff
