@@ -76,14 +76,12 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
-
-      - name: Deploy via SSH (não precisa mais SSH, pode virar local!)
+      - name: Deploy local no servidor
         run: |
-          cd ${{ secrets.SERVER_PATH }}
+          cd ${{ secrets.SERVER_PATH }}   # <-- deve ser a pasta REAL com .git e docker-compose
           echo "Atualizando código no servidor..."
-          git pull origin main
+          git fetch --all
+          git reset --hard origin/main   # mais seguro que git pull
 
           echo "Subindo containers..."
           docker-compose down
