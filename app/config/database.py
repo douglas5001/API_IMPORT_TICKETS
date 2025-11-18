@@ -1,38 +1,57 @@
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from typing import Generator
-from sqlalchemy.orm import Session
-
 
 if os.getenv("PYTEST_RUNNING") == "1":
     load_dotenv(".env.test")
 else:
     load_dotenv()
 
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT")
-DB_NAME = os.getenv("DB_NAME")
-
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+
 if not DATABASE_URL:
-    if all([DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME]):
-        DATABASE_URL = (
-            f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}"
-            f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-        )
-    else:
-        raise RuntimeError("Variáveis de banco ausentes!")
+    DB_USER = os.getenv("DB_USER")
+    DB_PASSWORD = os.getenv("DB_PASSWORD")
+    DB_HOST = os.getenv("DB_HOST")
+    DB_PORT = os.getenv("DB_PORT")
+    DB_NAME = os.getenv("DB_NAME")
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    missing = [
+        k for k, v in {
+            "DB_USER": DB_USER,
+            "DB_PASSWORD": DB_PASSWORD,
+            "DB_HOST": DB_HOST,
+            "DB_PORT": DB_PORT,
+            "DB_NAME": DB_NAME,
+        }.items() if not v
+    ]
+
+    if missing:
+        raise RuntimeError(f"Variáveis de banco ausentes: {', '.join(missing)}")
+
+    DATABASE_URL = (
+        f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}"
+        f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    )
+
+
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine,
+)
 
 Base = declarative_base()
+
 
 def get_db() -> Generator[Session, None, None]:
     db = SessionLocal()
