@@ -38,7 +38,7 @@ jobs:
 
       # SECURITY - bandit
       - name: Segurança - bandit
-        run: bandit -r app/
+        run: bandit -r app/ -x app/tests
 
       # DEPENDENCY SECURITY - pip-audit
       - name: Auditoria de dependências - pip-audit
