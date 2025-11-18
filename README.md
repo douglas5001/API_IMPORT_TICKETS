@@ -17,8 +17,18 @@ docker run -d --name postgres_db -e POSTGRES_USER=root -e POSTGRES_PASSWORD=Senh
 ````
 
 ### Configure o `.env`
+
+Coloquei as credenciasi da GoogleCloud propositalmente.
 ```
 DATABASE_URL=postgresql+psycopg2://root:SenhaSuperForte1234@localhost:5432/postgres_db
+
+
+GOOGLE_CLIENT_ID=1020602488853-u5ivmee510retjgfdnp48tnqkiuorcr2.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_REDIRECT_URI=http://localhost:8000/api/v1/auth/google/callback
+
+SECRET_KEY=eqfvgergfejyrnbadvsrryutk435
+ACCESS_TOKEN_EXPIRE_MINUTES=60
 ```
 
 ### Inicialize o Venv

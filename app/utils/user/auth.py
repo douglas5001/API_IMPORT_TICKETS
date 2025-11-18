@@ -18,9 +18,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60
 security = HTTPBearer()
 
 
-# ==========================
-#  Gera Token JWT
-# ==========================
 def create_access_token(
     *,
     username: str,
@@ -38,9 +35,6 @@ def create_access_token(
     return encoded_jwt
 
 
-# ==========================
-#  Obtém usuário do token
-# ==========================
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 def get_current_user(
     token: str = Depends(oauth2_scheme),

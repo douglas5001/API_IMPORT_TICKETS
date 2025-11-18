@@ -8,13 +8,14 @@ setup_logging()
 
 
 
+
 # DEV: cria as tabelas que ainda não existem / Ou você pode criar as tabelas pelo Alembic seguindo o RADME
 # Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=config.app_name)
 
 app.include_router(ticket_controller.router, prefix="/api/v1")
-app.include_router(auth_controller.router, prefix="/api/v1")
+app.include_router(auth_controller.router, prefix="/api/v1", tags=["Auth"])
 
 @app.get("/health")
 def ping():
