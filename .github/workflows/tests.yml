@@ -23,16 +23,17 @@ jobs:
           --health-cmd "pg_isready -U postgres"
           --health-interval=5s
           --health-timeout=5s
-          --health-retries=10
+          --health-retries=20
 
     env:
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      # Variáveis usadas pelo seu código
+      DB_USER: postgres
+      DB_PASSWORD: postgres
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_NAME: postgres
 
-      DATABASE_URL: postgresql+psycopg2://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@postgres:5432/${{ secrets.DB_NAME }}
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/postgres
 
     steps:
       - name: Checkout
@@ -53,10 +54,10 @@ jobs:
 
       - name: Wait for PostgreSQL
         run: |
-          echo "Waiting up to 60 seconds for PostgreSQL..."
+          echo "Waiting for PostgreSQL..."
           for i in {1..30}; do
             pg_isready -h postgres -p 5432 && break
-            echo "Postgres not ready yet... retrying"
+            echo "Postgres not ready... retry $i"
             sleep 2
           done
 
