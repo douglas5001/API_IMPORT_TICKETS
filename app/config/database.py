@@ -4,10 +4,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from typing import Generator
 
-if os.getenv("PYTEST_RUNNING") == "1":
+
+if os.path.exists(".env.test"):
     load_dotenv(".env.test")
 else:
     load_dotenv()
+
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -18,7 +20,6 @@ if not DATABASE_URL:
     DB_HOST = os.getenv("DB_HOST")
     DB_PORT = os.getenv("DB_PORT")
     DB_NAME = os.getenv("DB_NAME")
-
 
     missing = [
         k for k, v in {
@@ -31,18 +32,14 @@ if not DATABASE_URL:
     ]
 
     if missing:
-        raise RuntimeError(f"Variáveis de banco ausentes: {', '.join(missing)}")
+        raise RuntimeError(f"Variáveis ausentes: {', '.join(missing)}")
 
     DATABASE_URL = (
         f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}"
         f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
 
-
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True,
-)
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 SessionLocal = sessionmaker(
     autocommit=False,
