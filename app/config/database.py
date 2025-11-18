@@ -3,8 +3,12 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Carrega .env (funciona no uvicorn, pytest e Docker)
-load_dotenv()
+# -------------------------------------
+# NÃO carregar .env durante execução de testes
+# -------------------------------------
+if os.getenv("PYTEST_CURRENT_TEST") is None:
+    load_dotenv()
+# -------------------------------------
 
 # ---- Variáveis individuais ----
 DB_USER = os.getenv("DB_USER")
