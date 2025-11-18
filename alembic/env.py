@@ -15,7 +15,9 @@ if str(BASE_DIR) not in sys.path:
 
 # Agora conseguimos importar "app"
 from app.config.database import Base, engine
-from app.models import ticket_model  # importa o model para registrar no Base.metadata
+from app.models import ticket_model
+from app.models import ticket_log_model
+# importa o model para registrar no Base.metadata
 # se depois tiver mais models, importa aqui também
 # from app.models import user_model
 
