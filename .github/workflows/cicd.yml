@@ -85,10 +85,10 @@ jobs:
           git reset --hard origin/main
           
           echo "Subindo containers..."
-          docker-compose down || true
-          docker-compose up -d --build
+          docker compose down || true
+          docker compose up -d --build
           
           echo "Executando migrações..."
-          docker-compose exec -T api alembic upgrade head
+          docker compose exec -T api alembic upgrade head
           
           echo "Deploy concluído com sucesso!"
