@@ -20,19 +20,18 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres"
+          --health-cmd="pg_isready -U postgres"
           --health-interval=5s
           --health-timeout=5s
           --health-retries=20
 
     env:
-      # Variáveis usadas pelo seu código
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_HOST: postgres
       DB_PORT: 5432
       DB_NAME: postgres
-
+      
       DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/postgres
 
     steps:
@@ -52,12 +51,11 @@ jobs:
       - name: Install PostgreSQL client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
-      - name: Wait for PostgreSQL
+      - name: Wait for PostgreSQL to be ready
         run: |
           echo "Waiting for PostgreSQL..."
-          for i in {1..30}; do
-            pg_isready -h postgres -p 5432 && break
-            echo "Postgres not ready... retry $i"
+          until pg_isready -h postgres -p 5432 -U postgres; do
+            echo "Postgres not ready, retrying..."
             sleep 2
           done
 
