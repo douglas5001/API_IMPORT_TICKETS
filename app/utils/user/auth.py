@@ -46,7 +46,7 @@ def get_current_user(
     if not user_id:
         raise HTTPException(status_code=401, detail="Token inválido")
 
-    user = db.query(User).filter(User.id == user_id).first()
+    user = db.query(User).filter(User.id == user_id).first() # type: ignore[attr-defined]
 
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
