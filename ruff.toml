@@ -1,0 +1,5 @@
+exclude = [
+    "app/tests",
+]
+line-length = 120
+target-version = "py312"
