@@ -1,0 +1,101 @@
+name: CI/CD Pipeline - API_IMPORT_TICKETS
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+
+  # --------------------------------------------------
+  #  JOB 1 — Testes (CI)
+  # --------------------------------------------------
+  tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_NAME: test_db
+
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/test_db
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Aguardar PostgreSQL
+        run: |
+          for i in {1..10}; do
+            pg_isready -h localhost -p 5432 && break
+            sleep 2
+          done
+
+      - name: Rodar migrações
+        run: alembic upgrade head
+
+      - name: Rodar Testes (pytest)
+        run: pytest -v
+
+
+  # --------------------------------------------------
+  #  JOB 2 — Deploy (CD)
+  #  Só executa se o CI PASSAR
+  # --------------------------------------------------
+  deploy:
+    runs-on: ubuntu-latest
+    needs: tests   # ← SE tests falhar, NÃO DEPLOYA!
+
+    if: github.ref == 'refs/heads/main'  # apenas main
+
+    steps:
+      - name: Checkout no repositório
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd ${{ secrets.SERVER_PATH }}
+            echo "Atualizando código no servidor..."
+            git pull
+
+            echo "Subindo containers..."
+            docker-compose down
+            docker-compose up -d --build
+
+            echo "Executando migrações..."
+            docker-compose exec -T api alembic upgrade head
+
+            echo "Deploy concluído com sucesso!"
