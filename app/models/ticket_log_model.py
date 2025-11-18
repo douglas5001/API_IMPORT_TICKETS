@@ -12,7 +12,7 @@ class TicketLog(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
 
     ticket_id: Mapped[int | None] = mapped_column(
-        ForeignKey("tickets.id"),
+        ForeignKey("tickets.id", ondelete="SET NULL"),
         nullable=True,
         index=True,
     )

@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
 
-# Carrega .env (produção) ou .env.test (pytest)
+
 if os.getenv("PYTEST_RUNNING") == "1":
     load_dotenv(".env.test")
 else:
@@ -13,7 +13,6 @@ class Config(BaseSettings):
     app_name: str = "MyProjectFastApiTickts"
     debug: bool = False
 
-    # Valores default SOMENTE para testes
     db_user: str = "postgres"
     db_password: str = "postgres"
     db_host: str = "localhost"
@@ -21,7 +20,7 @@ class Config(BaseSettings):
     db_name: str = "postgres"
 
     model_config = SettingsConfigDict(
-        env_file=None,  # já carregamos manualmente com load_dotenv()
+        env_file=None,
         extra="ignore"
     )
 

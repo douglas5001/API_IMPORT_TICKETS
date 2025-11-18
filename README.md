@@ -1,5 +1,14 @@
 # API_IMPORT_TICKETS
 
+O projeto está atualmente configurado para realizar o deploy em:
+`http://147.93.183.190:8001/docs`
+
+Basta realizar um commit na branch main para que o processo de CI/CD seja executado automaticamente.
+
+![alt text](image.png)
+
+
+# Inicialização do projeto em ambiente DEV
 
 Instalação do banco de dados
 
@@ -7,17 +16,42 @@ Instalação do banco de dados
 docker run -d --name postgres_db -e POSTGRES_USER=root -e POSTGRES_PASSWORD=SenhaSuperForte1234 -e POSTGRES_DB=postgres_db -p 5432:5432 postgres:15
 ````
 
-Inicializar api
+### Configure o `.env`
 ```
-uvicorn app.main:app --reload
+DATABASE_URL=postgresql+psycopg2://root:SenhaSuperForte1234@localhost:5432/postgres_db
 ```
 
-### Para fazer uso do Alembic
+### Inicialize o Venv
+````
+python -m venv .venv
+````
 
+### Instale as dependências
+````
+install -r requirements.txt
+````
+
+### Crie as tabelas via Alembic
 ```
 alembic revision --autogenerate -m "criação da tabela de tickets"
 ```
 
+### Rode a migração
 ```
 alembic upgrade head
 ```
+
+### Inicializar api
+```
+uvicorn app.main:app --reload
+```
+
+## Instalação do serviço em produção
+Caso queira executar o projeto para produção basta inicializar o docker-compose.yml
+
+```
+docker compose up -d
+```
+
+
+

@@ -6,7 +6,7 @@ class TicketCreate(BaseModel):
     cod_ticket: str
     descricao: str
     responsavel: str
-    data_atualizacao: datetime
+    # data_atualizacao: datetime
 
 
 class TicketRead(BaseModel):

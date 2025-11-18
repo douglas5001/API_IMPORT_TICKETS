@@ -83,12 +83,14 @@ class TicketRepository:
                 status_code=400,
                 detail=f"cod_ticket '{data.cod_ticket}' já existe",
             )
+            
+        now = datetime.now(LOCAL_TZ)
 
         ticket = Ticket(
             cod_ticket=data.cod_ticket,
             descricao=data.descricao,
             responsavel=data.responsavel,
-            data_atualizacao=data.data_atualizacao,
+            data_atualizacao=now,
         )
 
         self._db.add(ticket)
@@ -112,11 +114,13 @@ class TicketRepository:
             return None
 
         before = self._ticket_to_dict(ticket)
+        
+        now = datetime.now(LOCAL_TZ)
 
         ticket.cod_ticket = data.cod_ticket
         ticket.descricao = data.descricao
         ticket.responsavel = data.responsavel
-        ticket.data_atualizacao = data.data_atualizacao
+        ticket.data_atualizacao = now
 
         self._db.flush()
 
