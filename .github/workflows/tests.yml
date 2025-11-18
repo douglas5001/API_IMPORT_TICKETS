@@ -20,13 +20,12 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U postgres"
+          --health-cmd "pg_isready -U postgres"
           --health-interval=5s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=10
 
     env:
-      # → Secrets usados somente pela aplicação
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_HOST: postgres
@@ -49,11 +48,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
       - name: Wait for PostgreSQL
         run: |
-          echo "Waiting for PostgreSQL..."
-          for i in {1..10}; do
+          echo "Waiting up to 60 seconds for PostgreSQL..."
+          for i in {1..30}; do
             pg_isready -h postgres -p 5432 && break
+            echo "Postgres not ready yet... retrying"
             sleep 2
           done
 
