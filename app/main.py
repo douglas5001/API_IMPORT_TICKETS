@@ -14,6 +14,7 @@ app = FastAPI(title=config.app_name)
 app.include_router(ticket_controller.router, prefix="/api/v1")
 
 
-@app.get("/ping")
+@app.get("/health")
 def ping():
     return {"status": "ok"}
+
