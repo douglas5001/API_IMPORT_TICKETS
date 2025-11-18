@@ -10,30 +10,6 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=20
-
-    env:
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: postgres
-      
-      DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/postgres
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,19 +24,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install PostgreSQL client
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
-
-      - name: Wait for PostgreSQL to be ready
+      - name: Install Docker Compose
         run: |
-          echo "Waiting for PostgreSQL..."
-          until pg_isready -h postgres -p 5432 -U postgres; do
-            echo "Postgres not ready, retrying..."
-            sleep 2
-          done
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      - name: Start PostgreSQL with Docker Compose
+        run: |
+          docker-compose -f docker-compose.test.yml up -d
+          echo "Waiting for DB to be ready..."
+          docker-compose -f docker-compose.test.yml exec -T postgres pg_isready -U postgres
 
       - name: Run Alembic migrations
+        env:
+          DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/postgres
         run: alembic upgrade head
 
-      - name: Run tests
+      - name: Run Tests
+        env:
+          DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/postgres
         run: pytest -v
