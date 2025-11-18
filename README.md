@@ -9,13 +9,13 @@ docker run -d --name postgres_db -e POSTGRES_USER=root -e POSTGRES_PASSWORD=Senh
 
 Inicializar api
 ```
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 
 ### Para fazer uso do Alembic
 
 ```
-alembic revision --autogenerate -m "criação inicial de users"
+alembic revision --autogenerate -m "criação da tabela de tickets"
 ```
 
 ```
