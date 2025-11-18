@@ -68,6 +68,7 @@ jobs:
           --health-retries 5
 
     env:
+      PYTEST_RUNNING: "1"    # <===== ESSENCIAL
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_HOST: localhost
@@ -101,7 +102,6 @@ jobs:
 
       - name: Rodar Testes (pytest)
         run: pytest -v
-
 
   # ==========================================================
   #  JOB 3 — DOCKER BUILD TEST (antes do deploy)
