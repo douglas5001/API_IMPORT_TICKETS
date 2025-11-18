@@ -1,3 +1,5 @@
+# ruff: noqa: F401
+
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
@@ -5,11 +7,10 @@ from alembic import context
 
 # --- Imports do APP DEVEM VIR DEPOIS do Alembic ---
 from app.config.database import Base, engine
-from app.models import ticket_model  # necessário para registrar no Base.metadata
-from app.models import ticket_log_model  # necessário para registrar no Base.metadata
+from app.models import ticket_model
+from app.models import ticket_log_model
 # --------------------------------------------------
 
-# Interpret the config file for Python logging.
 config = context.config
 
 if config.config_file_name is not None:
@@ -26,7 +27,6 @@ def run_migrations_offline():
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
     )
-
     with context.begin_transaction():
         context.run_migrations()
 
@@ -35,7 +35,10 @@ def run_migrations_online():
     connectable = engine
 
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata
+        )
 
         with context.begin_transaction():
             context.run_migrations()
