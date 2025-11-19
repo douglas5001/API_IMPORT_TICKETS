@@ -137,7 +137,7 @@ jobs:
           git reset --hard origin/main
 
           echo "Subindo containers..."
-          docker compose down || true
+          docker compose down -v || true
           docker compose up -d --build
 
           echo "Executando migrações..."
