@@ -37,7 +37,7 @@ DATABASE_URL=postgresql+psycopg2://root:SenhaSuperForte1234@localhost:5432/postg
 
 GOOGLE_CLIENT_ID=1020602488853-u5ivmee510retjgfdnp48tnqkiuorcr2.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=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
-GOOGLE_REDIRECT_URI=http://localhost:8000/api/v1/auth/google/callback
+GOOGLE_REDIRECT_URI=http://localhost:8001/api/v1/auth/google/callback
 
 SECRET_KEY=eqfvgergfejyrnbadvsrryutk435
 ACCESS_TOKEN_EXPIRE_MINUTES=60
