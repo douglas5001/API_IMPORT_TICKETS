@@ -40,13 +40,14 @@ docker ps
 
 Vai retornar algo como
 
-![alt text](image/image-2.png)
+![alt text](image/imagee.png)
 
 Estrutura esperada no banco de dados
 ![alt text](image/image-3.png)
 
+---
 
-Vou realizar os teste utilizadno a ferramenta `Postman`, mas o mesmo funciona com o Swagger em `http://localhost:8001/docs`
+Vamos realizar os teste utilizadno a ferramenta `Postman`, mas o mesmo funciona com o Swagger em `http://localhost:8001/docs`
 
 <br>
 
