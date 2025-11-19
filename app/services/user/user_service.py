@@ -27,3 +27,4 @@ class UserService:
             name=name,
             profile_id=int(guest_profile.id),
         )
+
