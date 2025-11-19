@@ -196,3 +196,7 @@ Caso não tenha a permissão retorna
 - Também podemos implementar quem alterou os estados capturando o valor das rules do token do usuário
 
 ![alt text](image/image-17.png)
+
+Ultimo requisito é o endpoint de status, inclusive é utilizado ao final do deploy para validar se o serviço esta operante.
+
+![alt text](image/image59.png)
