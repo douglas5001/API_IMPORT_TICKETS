@@ -195,7 +195,12 @@ Caso não tenha a permissão retorna
 
 - Também podemos implementar quem alterou os estados capturando o valor das rules do token do usuário
 
-![alt text](image/image-17.png)
+Como pode ver tem logs de todos os tipos `CREATE`, `UPDATE`, `DELETE`, `IMPORT_CREATED` e `IMPORT_SKIPPED`
+
+![alt text](image/bancologs.png)
+
+---
+### Status Api
 
 Ultimo requisito é o endpoint de status, inclusive é utilizado ao final do deploy para validar se o serviço esta operante.
 
