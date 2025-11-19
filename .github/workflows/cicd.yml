@@ -141,6 +141,7 @@ jobs:
           docker compose up -d --build
 
           echo "Executando migrações..."
+          sleep 10
           docker compose exec -T api alembic upgrade head
 
           echo "Realizando health-check..."
