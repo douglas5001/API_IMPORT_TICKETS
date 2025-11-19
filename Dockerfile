@@ -22,6 +22,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copia o resto do projeto
 COPY . .
 
+RUN chmod +x /app/entrypoint.sh
+
 # Expõe a porta interna onde o Uvicorn irá rodar
 EXPOSE 8000
 
