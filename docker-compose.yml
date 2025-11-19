@@ -13,7 +13,15 @@ services:
       - postgres_db
     volumes:
       - .:/app
-    entrypoint: ["/app/entrypoint.sh"]  # <-- ESSENCIAL
+    command: >
+      sh -c "
+        echo '⏳ Aguardando banco...';
+        sleep 3;
+        echo '🚀 Rodando migrations Alembic...';
+        alembic upgrade head;
+        echo '▶️ Iniciando FastAPI...';
+        uvicorn app.main:app --host 0.0.0.0 --port 8010 --reload
+      "
 
   postgres_db:
     image: postgres:15

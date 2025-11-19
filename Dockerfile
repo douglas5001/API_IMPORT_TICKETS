@@ -19,12 +19,7 @@ COPY requirements.txt .
 # Instala dependências
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
-
-# Copia o resto do projeto
 COPY . .
-
 
 # Expõe a porta interna onde o Uvicorn irá rodar
 EXPOSE 8000
