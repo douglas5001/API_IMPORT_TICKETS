@@ -1,7 +1,6 @@
 # API_IMPORT_TICKETS
 
 
-
 ### Instrução de uso (PRODUÇÃO)
 
 - [Como instalar na maquina e testar](./INSTRUCAO.md)
