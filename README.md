@@ -1,18 +1,23 @@
 # API_IMPORT_TICKETS
 
-### Instrução
 
-- [Como testar o projeto](./INSTRUCAO.md)
+
+### Instrução de uso (PRODUÇÃO)
+
+- [Como instalar na maquina e testar](./INSTRUCAO.md)
 
 ----
+
 
 ### OBS
 O projeto está atualmente configurado para realizar o deploy em:
 `http://147.93.183.190:8001/docs`
 
-Basta realizar um commit na branch main para que o processo de CI/CD seja executado automaticamente.
+Lá você pode ver os endpoints configurados
 
-![alt text](image.png)
+**Funcionamento do CI/CD:** Basta realizar um commit na branch main para que o processo de CI/CD seja executado automaticamente.
+
+![alt text](image/image.png)
 
 
 # Inicialização do projeto em ambiente DEV
@@ -77,4 +82,4 @@ Você pode acassar atraves do Swagger `http://127.0.0.1:8001/docs` ou pelo servi
 
 Pode importar o arquivo `API IMPORTAÇÃO.postman_collection.json` que deixei no diretorio e você terá as rotas prontas e com os dados para executar
 
-![alt text](image-1.png)
+![alt text](image/image-1.png)

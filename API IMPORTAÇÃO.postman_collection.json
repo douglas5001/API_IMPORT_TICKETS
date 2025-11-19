@@ -46,7 +46,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/tickets",
+					"raw": "http://127.0.0.1:8001/api/v1/tickets",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -54,7 +54,7 @@
 						"0",
 						"1"
 					],
-					"port": "8000",
+					"port": "8001",
 					"path": [
 						"api",
 						"v1",
@@ -68,9 +68,15 @@
 			"name": "DELETE_tasks",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzYzNDk1MjQ2fQ.q6RKzpZMCm1szkr6BYJlnaHADIJ0gk42s6sraV0Csqg",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/tickets/2",
+					"raw": "http://127.0.0.1:8001/api/v1/tickets/6",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -78,25 +84,25 @@
 						"0",
 						"1"
 					],
-					"port": "8000",
+					"port": "8001",
 					"path": [
 						"api",
 						"v1",
 						"tickets",
-						"2"
+						"6"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "PUT_ticket",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"cod_ticket\": \"accc\",\r\n  \"descricao\": \"Chamado de tei de teste\",\r\n  \"responsavel\": \"Douglas Portella\"\r\n}",
+					"raw": "{\r\n    \"cod_ticket\": \"RITM0951323\",\r\n    \"descricao\": \"Instalação dos módulos de segurança dos bancos. \\n\\nItaú, BB, Bradesco\",\r\n    \"responsavel\": \"Douglinhas\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -104,7 +110,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/tickets/1",
+					"raw": "http://127.0.0.1:8001/api/v1/tickets/6",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -112,12 +118,12 @@
 						"0",
 						"1"
 					],
-					"port": "8000",
+					"port": "8001",
 					"path": [
 						"api",
 						"v1",
 						"tickets",
-						"1"
+						"6"
 					]
 				}
 			},
@@ -139,7 +145,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/tickets/import",
+					"raw": "http://127.0.0.1:8001/api/v1/tickets/import",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -147,7 +153,7 @@
 						"0",
 						"1"
 					],
-					"port": "8000",
+					"port": "8001",
 					"path": [
 						"api",
 						"v1",
@@ -155,6 +161,36 @@
 						"import"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8001/api/v1/auth/google",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"google"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}
