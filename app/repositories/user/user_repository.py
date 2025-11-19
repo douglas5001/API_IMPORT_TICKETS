@@ -36,10 +36,14 @@ class UserRepository:
         return profile
 
     def create_user(self, *, email: str, name: str, profile_id: int) -> User:
-        user = User(email=email, name=name, profile_id=profile_id)
+        user = User(
+            email=email,
+            name=name,
+            profile_id=profile_id,
+        )
 
         self._db.add(user)
-        self._db.flush()
+        self._db.flush()      # garante ID gerado
         self._db.commit()
         self._db.refresh(user)
         return user

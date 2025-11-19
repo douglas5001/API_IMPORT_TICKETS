@@ -9,6 +9,10 @@ class UserService:
         self._repo = UserRepository(session)
 
     def create_or_get_google_user(self, user_info: dict) -> User:
+        """
+        Cria o usuário caso não exista, ou retorna o existente.
+        Sempre usa o perfil GUEST para novos logins Google.
+        """
         email = user_info["email"]
         name = user_info.get("name", email)
 
@@ -21,5 +25,5 @@ class UserService:
         return self._repo.create_user(
             email=email,
             name=name,
-            profile_id=guest_profile.id,
+            profile_id=int(guest_profile.id),
         )
