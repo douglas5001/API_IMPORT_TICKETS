@@ -71,7 +71,7 @@ docker compose up -d
 ```
 
 ## Instruções de utilização.
-Você pode acassar atraves do Swagger `http://127.0.0.1:8000/docs` ou pelo servidor remoto onde foi feito o deploy `http://147.93.183.190:8001/docs`
+Você pode acassar atraves do Swagger `http://127.0.0.1:8001/docs` ou pelo servidor remoto onde foi feito o deploy `http://147.93.183.190:8001/docs`
 
 ### OPÇÃO 2
 

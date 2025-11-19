@@ -1,35 +1,25 @@
-from app.models.user.user_model import User
-from app.models.user.profile_model import Profile
+# app/services/user/user_service.py
 from sqlalchemy.orm import Session
+from app.repositories.user.user_repository import UserRepository
+from app.models.user.user_model import User
+
 
 class UserService:
+    def __init__(self, session: Session):
+        self._repo = UserRepository(session)
 
-    def __init__(self, db: Session):
-        self.db = db
-
-    def create_or_get_google_user(self, user_info):
-
+    def create_or_get_google_user(self, user_info: dict) -> User:
         email = user_info["email"]
         name = user_info.get("name", email)
 
-        user = self.db.query(User).filter(User.email == email).first()
+        user = self._repo.get_by_email(email)
         if user:
             return user
 
-        # buscar perfil GUEST
-        guest_profile = self.db.query(Profile).filter(Profile.name == "GUEST").first()
+        guest_profile = self._repo.get_guest_profile()
 
-        if not guest_profile:
-            guest_profile = Profile(name="GUEST")
-            self.db.add(guest_profile)
-            self.db.commit()
-
-        user = User(
+        return self._repo.create_user(
             email=email,
             name=name,
-            profile_id=guest_profile.id
+            profile_id=guest_profile.id,
         )
-        self.db.add(user)
-        self.db.commit()
-        self.db.refresh(user)
-        return user

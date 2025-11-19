@@ -4,9 +4,9 @@ from zoneinfo import ZoneInfo
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from app.models.ticket_model import Ticket
-from app.models.ticket_log_model import TicketLog
-from app.schemas import ticket_schema
+from app.models.ticket.ticket_model import Ticket
+from app.models.ticket.ticket_log_model import TicketLog
+from app.schemas.ticket import ticket_schema
 
 LOCAL_TZ = ZoneInfo("America/Sao_Paulo")
 

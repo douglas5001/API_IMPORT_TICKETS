@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from app.config.config import config
 from app.utils.logging import setup_logging
 # from app.config.database import Base, engine
-from app.controllers import ticket_controller
+from app.controllers.ticket import ticket_controller
 from app.controllers.user import auth_controller
 setup_logging()
 

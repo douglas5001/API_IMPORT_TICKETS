@@ -1,5 +1,5 @@
-from app.repositories.ticket_repository import TicketRepository
-from app.models.ticket_model import Ticket
+from app.repositories.ticket.ticket_repository import TicketRepository
+from app.models.ticket.ticket_model import Ticket
 from app.config.database import SessionLocal
 
 

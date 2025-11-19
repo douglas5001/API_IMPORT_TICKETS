@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 import pandas as pd
 from sqlalchemy.orm import Session
 from app.config.database import get_db
-from app.schemas import ticket_schema
-from app.services.ticket_service import TicketService
+from app.schemas.ticket import ticket_schema
+from app.services.ticket.ticket_service import TicketService
 from app.utils.user.rbac import permission_required
 
 

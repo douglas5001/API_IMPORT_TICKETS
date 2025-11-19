@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from app.repositories.ticket_repository import TicketRepository
-from app.schemas import ticket_schema
-from app.models.ticket_model import Ticket
+from app.repositories.ticket.ticket_repository import TicketRepository
+from app.schemas.ticket import ticket_schema
+from app.models.ticket.ticket_model import Ticket
 
 
 class TicketService:

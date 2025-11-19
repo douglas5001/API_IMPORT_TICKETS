@@ -13,6 +13,7 @@ services:
       - postgres_db
     volumes:
       - .:/app
+    entrypoint: ["/app/entrypoint.sh"]  # <-- ESSENCIAL
 
   postgres_db:
     image: postgres:15
