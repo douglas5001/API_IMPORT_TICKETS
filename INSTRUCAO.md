@@ -205,3 +205,4 @@ Como pode ver tem logs de todos os tipos `CREATE`, `UPDATE`, `DELETE`, `IMPORT_C
 Ultimo requisito é o endpoint de status, inclusive é utilizado ao final do deploy para validar se o serviço esta operante.
 
 ![alt text](image/image59.png)
+
