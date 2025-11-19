@@ -1,5 +1,12 @@
 # API_IMPORT_TICKETS
 
+### Instrução
+
+- [Como testar o projeto](./INSTRUCAO.md)
+
+----
+
+### OBS
 O projeto está atualmente configurado para realizar o deploy em:
 `http://147.93.183.190:8001/docs`
 
@@ -53,7 +60,7 @@ alembic upgrade head
 
 ### Inicializar api
 ```
-uvicorn app.main:app --reload
+uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
 ```
 
 ## Instalação do serviço em produção

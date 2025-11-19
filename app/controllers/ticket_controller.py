@@ -12,11 +12,21 @@ from app.utils.user.rbac import permission_required
 router = APIRouter()
 
 def get_ticket_service(db: Session = Depends(get_db)) -> TicketService:
+    """
+    Importa tickets em massa a partir de um arquivo Excel.
+
+    Colunas esperadas: cod_ticket, descricao, responsavel, data_atualizacao
+    """
     return TicketService(session=db)
 
 
 @router.get("/tickets", response_model=list[ticket_schema.TicketRead])
 def get_tickets(service: TicketService = Depends(get_ticket_service)):
+    """
+    Importa tickets em massa a partir de um arquivo Excel.
+
+    Colunas esperadas: cod_ticket, descricao, responsavel, data_atualizacao
+    """
     return service.list_tickets()
 
 
@@ -31,8 +41,7 @@ def create_ticket(
 @router.get("/tickets/{ticket_id}", response_model=ticket_schema.TicketRead)
 def get_ticket(
     ticket_id: int,
-    service: TicketService = Depends(get_ticket_service),
-):
+    service: TicketService = Depends(get_ticket_service)):
     obj = service.get_ticket(ticket_id)
     if not obj:
         raise HTTPException(status_code=404, detail="Ticket not found")

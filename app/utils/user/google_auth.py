@@ -7,7 +7,7 @@ from app.models.user.profile_model import Profile
 from app.models.user.permission_model import Permission
 from app.utils.user.jwt_utils import create_access_token
 
-
+## Nao vou por no .env porque é só protótipo
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"  # nosec B105
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"  # nosec B105
 
